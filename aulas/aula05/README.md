@@ -1,44 +1,135 @@
-# 📚 Aula 05: Arquitetura, Componentização e Props
+# 📚 Aula 05: Listas Eficientes, Persistência e Componentes
 
-Neste ponto do campeonato, nosso arquivo `App.js` deve estar enorme. Temos funções de armazenamento, lógica de estado e várias tags de interface misturadas. Hoje, vamos aprender a pensar como engenheiros de software e organizar nosso projeto em "blocos de montar" (Lego).
+Com o To-Do interativo, aparecem três problemas típicos de app real:
+
+1. Listas grandes com `.map()` pesam na performance e na rolagem.
+2. Fechar o app **apaga** tudo (estado vive só na memória).
+3. O `App.js` começa a ficar grande demais — hora de **componentizar**.
 
 ## 🎯 Objetivos da Aula
-* Entender o conceito de **Componentização**.
-* Aprender a estruturar pastas em um projeto real (`src/components`).
-* Dominar o uso de **Props** (Propriedades) para passar dados de um arquivo para outro.
 
-## 🧱 O que é Componentização?
-No React, um Componente é basicamente uma função JavaScript que retorna uma interface (UI). Em vez de termos um arquivo gigante com 500 linhas de código, nós quebramos a interface em pedaços menores, reutilizáveis e independentes.
+* Trocar `.map()` por `<FlatList>` para listas longas.
+* Persistir dados com `@react-native-async-storage/async-storage`.
+* Carregar dados na abertura com `useEffect`.
+* Extrair UI reutilizável com **props** (`TaskCard`).
 
-* **Exemplo:** Em vez de desenhar a caixa de texto e o botão de "+" direto no `App.js`, criamos um arquivo separado chamado `InputTarefa.js`.
-* **Vantagem:** Se houver um bug no botão de adicionar, você sabe exatamente em qual arquivo procurar, sem correr o risco de quebrar a lista de tarefas.
+---
 
-## 🤝 Props (Propriedades): A Comunicação entre Arquivos
-Quando quebramos o app em vários arquivos, surge um problema: o Estado (`tasks`) está no `App.js`, mas o botão de deletar agora está dentro do arquivo `CardTarefa.js`. Como um fala com o outro? Através das **Props**.
+## 📜 Por que `FlatList`?
 
-As Props são como "parâmetros de função" no mundo do React. Elas permitem que o Componente Pai (`App.js`) envie dados ou funções para o Componente Filho (`CardTarefa.js`).
+`.map()` tenta desenhar **todos** os itens de uma vez. Em listas longas isso trava a UI.
 
-**Exemplo no Componente Pai (`App.js`):**
+A `FlatList` renderiza sob demanda (virtualização): só o que está (aproximadamente) visível na tela.
+
+Props essenciais:
+
+| Prop | Função |
+| :--- | :--- |
+| `data={tasks}` | Array de origem |
+| `keyExtractor={(item) => item.id}` | Identificador único |
+| `renderItem={({ item }) => ...}` | Como desenhar cada linha |
+
 ```javascript
-// Enviando o texto da tarefa e a função de deletar como Props
-<CardTarefa titulo="Estudar React" aoDeletar={funcaoDeletar} />
+<FlatList
+  data={tasks}
+  keyExtractor={(item) => item.id}
+  renderItem={({ item }) => (
+    <View>
+      <Text>{item.title}</Text>
+    </View>
+  )}
+/>
 ```
-**Exemplo no Componente Filho (`CardTarefa.js`):**
+
+---
+
+## 💾 AsyncStorage (persistência local)
+
+`useState` mora na RAM: fechou o app, perdeu os dados.
+
+O AsyncStorage funciona como um **gaveteiro chave → valor** no aparelho. Só grava **strings**.
+
+* Salvar objeto/array: `JSON.stringify(...)`
+* Ler de volta: `JSON.parse(...)`
+* Operações são **assíncronas** (`async` / `await`)
+
+```bash
+npx expo install @react-native-async-storage/async-storage
+```
+
+Ideia geral:
+
 ```javascript
-// Recebendo as Props (usamos desestruturação {})
-export function CardTarefa({ titulo, aoDeletar }) {
+await AsyncStorage.setItem('@tasks', JSON.stringify(tasks));
+const raw = await AsyncStorage.getItem('@tasks');
+const parsed = raw ? JSON.parse(raw) : [];
+```
+
+---
+
+## ⏱️ `useEffect` — carregar ao abrir
+
+Para buscar as tarefas salvas **quando a tela monta**:
+
+```javascript
+import { useEffect } from 'react';
+
+useEffect(() => {
+  loadTasks();
+}, []); // [] = executar uma vez na montagem
+```
+
+Salve também sempre que a lista mudar (após add/delete), chamando sua função `saveTasks`.
+
+---
+
+## 🧱 Componentização e Props
+
+Em vez de um único arquivo gigante, separe pedaços reutilizáveis.
+
+### Estrutura sugerida
+
+```text
+src/
+  components/   → pedaços de UI (TaskCard, etc.)
+  screens/      → telas inteiras (quando o app crescer)
+  services/     → storage, APIs (quando fizer sentido)
+```
+
+### Props = parâmetros entre componentes
+
+O pai (`App`) guarda o estado; o filho (`TaskCard`) só desenha e avisa eventos.
+
+**Pai:**
+
+```javascript
+<TaskCard title={item.title} onDelete={() => handleDelete(item.id)} />
+```
+
+**Filho:**
+
+```javascript
+export function TaskCard({ title, onDelete }) {
   return (
     <View>
-      <Text>{titulo}</Text>
-      <TouchableOpacity onPress={aoDeletar}>
-         <Text>X</Text>
+      <Text>{title}</Text>
+      <TouchableOpacity onPress={onDelete}>
+        <Text>X</Text>
       </TouchableOpacity>
     </View>
   );
 }
 ```
-📂 **Estrutura de Pastas Padrão**
-No mercado, não deixamos os arquivos soltos na raiz. Criamos uma pasta src/ (Source) e organizamos por responsabilidade:
-- src/components/: Pedaços de tela (Botões, Cards, Inputs).
-- src/screens/: Telas inteiras (Tela Home, Tela de Login).
-- src/services/: Conexões com banco de dados ou APIs.
+
+Vantagem: se o visual do card mudar, você edita um arquivo só — sem bagunçar a lógica da lista.
+
+---
+
+## ✅ Checklist de compreensão
+
+1. Quais 3 props básicas a `FlatList` exige?
+2. Por que AsyncStorage precisa de `JSON.stringify`?
+3. O que o `[]` no `useEffect` significa?
+4. O que são props na comunicação pai → filho?
+
+Na **Prática 05**, você aplica FlatList + persistência e extrai o `TaskCard` para `src/components`.

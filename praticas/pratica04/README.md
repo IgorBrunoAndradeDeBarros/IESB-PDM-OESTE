@@ -90,4 +90,4 @@ git commit -m "Feat: Implementa useState para adicionar e remover tarefas"
 git push origin feature/pratica04
 ```
 
-Na **Aula 05**, vamos melhorar listas (`FlatList`), persistir dados no aparelho (`AsyncStorage`) e organizar o código em componentes com **props**.
+Na **Aula 05**, vamos melhorar listas (`FlatList`) e persistir dados no aparelho (`AsyncStorage`). A organização em componentes fica para a Aula 06.

@@ -1,13 +1,12 @@
-# 💻 Prática 05: FlatList, Persistência e TaskCard
+# 💻 Prática 05: FlatList e App que Não Esquece
 
-Nesta prática o To-Do fica mais profissional: lista eficiente, dados que sobrevivem ao fechar o app, e código organizado em componente.
+Nesta prática o To-Do ganha lista eficiente e persistência local. **Ainda não** vamos extrair componentes — isso é a Prática 06.
 
 ## 🎯 Objetivos
 
 * Substituir `.map()` por `FlatList`.
 * Salvar e carregar tarefas com AsyncStorage + `useEffect`.
-* Extrair o card para `src/components/TaskCard`.
-* Garantir que o comportamento continue igual (teste de regressão).
+* Validar que fechar e reabrir o app mantém os dados.
 
 ---
 
@@ -37,9 +36,9 @@ npx expo start
 
 * `data={tasks}`
 * `keyExtractor={(item) => item.id}`
-* `renderItem={...}` desenhando cada tarefa
+* `renderItem={...}` desenhando cada tarefa (card ainda pode ficar inline no `App`)
 
-4. Teste adicionando **muitas** tarefas e confirme a rolagem suave.
+4. Teste adicionando **muitas** tarefas (15+) e confirme a rolagem suave.
 
 ---
 
@@ -62,44 +61,19 @@ Adicione 3 tarefas → feche o app por completo (remover dos recentes) → abra 
 
 ---
 
-## 🛠️ Parte C — Componente `TaskCard`
-
-1. Crie a pasta `src/components`.
-2. Crie `src/components/TaskCard.js` (ou `.jsx`).
-3. Recorte o JSX do card (e os estilos dele) para esse arquivo.
-4. O componente deve receber props: `{ title, onDelete }`.
-5. No `App`, importe e use na `FlatList`:
-
-```javascript
-import { TaskCard } from './src/components/TaskCard';
-
-// ...
-renderItem={({ item }) => (
-  <TaskCard
-    title={item.title}
-    onDelete={() => handleDelete(item.id)}
-  />
-)}
-```
-
-> Se na prática anterior o campo se chamava `task` em vez de `title`, padronize para `title` **ou** adapte a prop — o importante é pai e filho falarem a mesma língua.
-
----
-
 ## ✅ Critérios de entrega
 
 * [ ] `FlatList` rolando com muitos itens
 * [ ] Persistência: fechar e reabrir mantém as tarefas
-* [ ] `TaskCard` em `src/components` com props
-* [ ] App continua adicionando/deletando normalmente
+* [ ] Add e delete continuam funcionando
 * [ ] Issue, branch `feature/pratica05`, commit, push e Pull Request
 
 ### Commit sugerido
 
 ```bash
 git add .
-git commit -m "Feat: Adiciona FlatList, AsyncStorage e componente TaskCard"
+git commit -m "Feat: Adiciona FlatList e AsyncStorage para persistir tarefas"
 git push origin feature/pratica05
 ```
 
-Parabéns: ao final desta trilha você saiu do zero (conceito + ambiente) até um To-Do multiplataforma com persistência e código organizado.
+Na **Aula 06**, vamos **organizar o código**: extrair o card da tarefa para um componente reutilizável com props.

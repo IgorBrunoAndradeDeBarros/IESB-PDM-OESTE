@@ -28,7 +28,8 @@ Este repositório está organizado da seguinte forma:
 | 02 | Anatomia do projeto Expo + `View`/`Text` | Criar projeto e explorar arquivos |
 | 03 | Componentes core, StyleSheet e Flexbox | Interface estática do To-Do |
 | 04 | Estado (`useState`) e imutabilidade | Adicionar e deletar tarefas |
-| 05 | FlatList, AsyncStorage e componentes | Lista persistente + `TaskCard` |
+| 05 | FlatList e AsyncStorage | Lista eficiente + persistência |
+| 06 | Componentização e props | Extrair `TaskCard` |
 
 ## 🚀 Fluxo de Trabalho Acadêmico
 

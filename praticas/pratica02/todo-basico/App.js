@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
   return (
-    <Viewx''>
+    <View style={styles.container}>
           <Text>Programação para Dispositivos Móveis</Text>
           <Text>Olá, [Seu Nome]!</Text>
           <Text>Meu segundo passo com Expo e React Native</Text>

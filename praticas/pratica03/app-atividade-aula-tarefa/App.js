@@ -14,36 +14,32 @@ export default function App() {
     setMetas([...metas, inputMetaText]);
   }
 
-  return (
-    <View style={styles.mainContainer}>
-
-      <View style={styles.formContainer}>
-        <View style={{ width: '65%' }}>
-          <TextInput
-            style={styles.inputText}
-            placeholder={rotulo_input_meta}
-            onChangeText={metaInputHandler}
-          />
-        </View>
-
-        <View style={{ width: '30%' }}>
-          <Button
-            title={rotulo_btn_cadastro_meta}
-            onPress={adicionarMetaHandler}
-          />
-        </View>
+return (
+  <View style={styles.mainContainer}>
+    <View style={{flexDirection:'row',
+                  justifyContent:'space-between',
+                  flex: 1}}>
+      <View style={{width:'65%'}}>
+        <TextInput style={styles.inputText}
+          placeholder={rotulo_input_meta}
+          onChangeText={metaInputHandler}
+        />
       </View>
 
-      <ScrollView style={styles.metaContainer}>
-        {metas.map((meta, index) => (
-          <Text key={index} style={styles.item}>
-            {meta}
-          </Text>
-        ))}
-      </ScrollView>
+      <View style={{width:'30%'}}>
+        <Button title={rotulo_btn_cadastro_meta}
+          onPress={adicionarMetaHandler} />
+      </View>
 
     </View>
-  );
+    <View style={styles.metaContainer}>
+      <ScrollView>
+        {metas.map((meta, index) => <Text key={index}
+        style={styles.item}>{meta}</Text>)}
+      </ScrollView>
+    </View>
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
@@ -63,11 +59,11 @@ const styles = StyleSheet.create({
   },
 
   metaContainer: {
-    flex: 1,
+    flex: 10,
   },
 
   item: {
-    margin: 8,
+    margin: 10,
     borderRadius: 5,
     padding: 10,
     backgroundColor: 'lightblue',

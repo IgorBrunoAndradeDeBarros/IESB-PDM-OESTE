@@ -1,71 +1,36 @@
-import { StyleSheet, Text, View, ScrollView, Button, TextInput } from 'react-native';
-import {rotulo_btn_cadastro_meta, rotulo_input_meta,rotulo_lista_metas} from './mensagens';
+import { StyleSheet, View } from 'react-native';
 import { useState } from 'react';
+import MetasList from './components/MetasList';
+import MetaInput from './components/MetaInput';
 
 export default function App() {
-  const [inputMetaText, setInputMetaText] = useState('');
+
   const [metas, setMetas] = useState([]);
 
-  function metaInputHandler(inputText) {
-    setInputMetaText(inputText);
+  function adicionarMetaHandler(inputMeta){
+    setMetas([...metas, inputMeta]);
   }
 
-  function adicionarMetaHandler() {
-    setMetas([...metas, inputMetaText]);
-  }
+  return (
+    <View style={styles.mainContainer}>
 
-return (
-  <View style={styles.mainContainer}>
-    <View style={{flexDirection:'row',
-                  justifyContent:'space-between',
-                  flex: 1}}>
-      <View style={{width:'65%'}}>
-        <TextInput style={styles.inputText}
-          placeholder={rotulo_input_meta}
-          onChangeText={metaInputHandler}
-        />
+      <MetaInput onAddMeta={adicionarMetaHandler} />
+
+      <View style={styles.metaContainer}>
+        <MetasList array={metas} />
       </View>
-
-      <View style={{width:'30%'}}>
-        <Button title={rotulo_btn_cadastro_meta}
-          onPress={adicionarMetaHandler} />
-      </View>
-
     </View>
-    <View style={styles.metaContainer}>
-      <ScrollView>
-        {metas.map((meta, index) => <Text key={index}
-        style={styles.item}>{meta}</Text>)}
-      </ScrollView>
-    </View>
-  </View>
-);
+  );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
     padding: 30,
     flex: 1,
-  },
-
-  formContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-
-  inputText: {
-    borderColor: '#cccccc',
-    borderWidth: 1,
+    flexDirection: 'column',
   },
 
   metaContainer: {
-    flex: 10,
-  },
-
-  item: {
-    margin: 10,
-    borderRadius: 5,
-    padding: 10,
-    backgroundColor: 'lightblue',
-  },
+    flex: 15,
+  }
 });

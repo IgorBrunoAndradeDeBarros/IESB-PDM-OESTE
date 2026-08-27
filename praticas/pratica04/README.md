@@ -1,93 +1,59 @@
-# 💻 Prática 04: Dando Vida ao App (Adicionar e Deletar)
+# Meu Diário Acadêmico
 
-Vamos conectar a interface ao React. Ao final, você digita uma tarefa, adiciona à lista e remove pelo `X`.
+Aplicativo simples em React Native (Expo) para cadastro de disciplinas, desenvolvido como atividade prática de layout e componentes.
 
-## 🎯 Objetivos
-
-* Criar estados para o texto do input e para a lista.
-* Implementar `handleAdd` e `handleDelete` com imutabilidade.
-* Trocar cards estáticos por renderização com `.map()`.
-* Validar o fluxo no Expo Go.
-
----
-
-## 📦 Fluxo Git
-
-1. Crie a Issue da **Prática 04**.
-2. Branch:
+## 🚀 Comando usado para criar o projeto
 
 ```bash
-git checkout -b feature/pratica04
+npx create-expo-app MeuDiarioAcademico
 ```
 
-3. Continue o app em `praticas/pratica04` (crie o Expo se ainda não existir, ou evolua a cópia da Prática 03).
+Bibliotecas adicionadas com:
 
 ```bash
+npx expo install react-native-safe-area-context
+```
+
+## ▶️ Como rodar
+
+```bash
+cd MeuDiarioAcademico
 npm install
 npx expo start
 ```
 
----
+Escaneie o QR Code com o app Expo Go (Android/iOS) ou rode em um emulador.
 
-## 🛠️ O que implementar
+## 📱 Prints da tela
 
-### 1. Estados
+> Substitua os placeholders abaixo pelos prints reais do app rodando.
 
-No componente principal:
+![Tela principal](./prints/tela-principal.png)
 
-* `taskText` — string do que está sendo digitado (`useState('')`)
-* `tasks` — array de tarefas (`useState([])`)
+![Botão pressionado](./prints/botao-pressionado.png)
 
-### 2. Capturar digitação
+## 🧩 Explicação breve
 
-No `TextInput`:
+- **`labels.js`**: centraliza todos os textos da interface (título do app, placeholder, texto do botão, título da lista, label do switch), exportados como constantes e importados em `App.js`.
+- **`App.js`**:
+    - Usa `SafeAreaView` (de `react-native-safe-area-context`) para evitar sobreposição com a área de notch/status bar.
+    - Cabeçalho com o título do app.
+    - Linha (`flexDirection: 'row'`) contendo `TextInput` (~70% de largura) e um botão `Pressable` (~30%, via `flex: 1`) para adicionar disciplinas.
+    - `Switch` opcional "Mostrar apenas obrigatórias" (ainda sem lógica de filtro).
+    - Lista estática de disciplinas renderizada com `.map`, exibida abaixo do formulário.
+- **Estilos (`StyleSheet.create`)**: organizados por seção (container, header, row, input, button, switch, list, item), com comentários explicando o uso de `justifyContent` e `alignItems` em cada bloco.
+- **Dimensões**: uso de largura percentual (`width: '68%'` no input) e uso de `flex` (`flex: 1` no container e no botão), conforme exigido.
 
-* `value={taskText}`
-* `onChangeText={setTaskText}`
+## ✅ Requisitos atendidos
 
-### 3. Função `handleAdd`
+- [x] Projeto sobe com `npx expo start`
+- [x] Import/export de rótulos (`labels.js`)
+- [x] Layout com Flexbox (row + column)
+- [x] StyleSheet organizado e legível
+- [x] `Pressable` com estilo de pressionado (desafio opcional)
+- [x] `Switch` "Mostrar apenas obrigatórias" (desafio opcional)
+- [x] README com prints e explicação
 
-* Ignore texto vazio (`trim`).
-* Crie objeto `{ id, title }` (`id` com `Date.now().toString()` é suficiente neste exercício).
-* Atualize a lista com spread: `setTasks([...tasks, newTask])`.
-* Limpe o input: `setTaskText('')`.
-* Ligue essa função no `onPress` do botão `+`.
+## 🔗 Pull Request
 
-### 4. Renderizar com `.map()`
-
-* Remova os cards hardcoded.
-* Use `tasks.map(...)` para desenhar cada card.
-* Não esqueça a prop `key={item.id}`.
-
-### 5. Função `handleDelete(id)`
-
-* Use `filter` para gerar nova lista sem o id clicado.
-* Passe a função ao `onPress` do `X` de cada card.
-
----
-
-## 🧪 Como testar
-
-1. Adicione 3 tarefas diferentes.
-2. Delete a do meio.
-3. Confirme que o input limpa após adicionar.
-4. (Esperado) Com muitas tarefas, a tela **pode não rolar bem** — isso será resolvido na próxima aula com `FlatList`.
-
----
-
-## ✅ Critérios de entrega
-
-* [ ] Adicionar e deletar funcionando no celular
-* [ ] Estados + imutabilidade (sem `push`/`splice` no estado)
-* [ ] Lista renderizada com `.map()`
-* [ ] Issue, branch `feature/pratica04`, commit, push e Pull Request
-
-### Commit sugerido
-
-```bash
-git add .
-git commit -m "Feat: Implementa useState para adicionar e remover tarefas"
-git push origin feature/pratica04
-```
-
-Na **Aula 05**, vamos melhorar listas (`FlatList`) e persistir dados no aparelho (`AsyncStorage`). A organização em componentes fica para a Aula 06.
+> Cole aqui o link do PR do projeto.

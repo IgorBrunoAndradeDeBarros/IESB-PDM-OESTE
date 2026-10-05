@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,31 +10,44 @@ import IconButton from './components/IconButton';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function BottonTabScreen(){
+function BottomTabScreen() {
   return (
     <Tab.Navigator
-    screenOptions={( {navigation } ) => ({ headerRight: () => <IconButton
-    icon="add" size={24} onPress={() => {
-      navigation.navigate('GerenciarDespesa')
-    }} /> }) }>
-
-      <Tab.Screen name="DespesasRecentes" component={DespesasRecentes}
-      options={{tabBarIcon: ({color, size}) => (<Ionicons name="hourglass"
-      size={size} color={color} />),
-      tabBarLabel: 'Recentes',
-      title: 'Despesas Recentes',
-      tabBarLabelStyle: { fontSize: 12 }}}
+      screenOptions={({ navigation }) => ({
+        headerRight: () => (
+          <IconButton
+            icon="add"
+            size={24}
+            onPress={() => navigation.navigate('GerenciarDespesa')}
+          />
+        ),
+        tabBarLabelStyle: { fontSize: 12 },
+      })}
+    >
+      <Tab.Screen
+        name="DespesasRecentes"
+        component={DespesasRecentes}
+        options={{
+          title: 'Despesas Recentes',
+          tabBarLabel: 'Recentes',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="hourglass" size={size} color={color} />
+          ),
+        }}
       />
-      <Tab.Screen name="TodasDespesas" component={TodasDespesas}
-       options={{tabBarIcon: ({color, size}) => (<Ionicons name="wallet-outline"
-       size={size} color={color} />),
-       tabBarLabel: 'Todas',
-       title: 'Todas as Despesas',
-       tabBarLabelStyle: { fontSize: 12 }}}
-       />
-
+      <Tab.Screen
+        name="TodasDespesas"
+        component={TodasDespesas}
+        options={{
+          title: 'Todas as Despesas',
+          tabBarLabel: 'Todas',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="wallet-outline" size={size} color={color} />
+          ),
+        }}
+      />
     </Tab.Navigator>
-  )
+  );
 }
 
 export default function App() {
@@ -43,8 +55,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="DespesasTab"
-          component={BottonTabScreen}
+          name="Despesas"
+          component={BottomTabScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="GerenciarDespesa" component={GerenciarDespesa} />
@@ -52,12 +64,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
